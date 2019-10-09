@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html ng-app="grovyApp">
+<head>
+  <meta charset="utf-8" />
+  <title>Grovy prototype Massimo Manganiello</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.3/angular.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" type="text/javascript"></script>
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <script src="js/chart.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/moment.js"></script>
+</head>
+<body ng-controller="GrovyCtrl">
+  <div ng-view></div>
+  <select ng-model="selectedPeriod" ng-options="x for x in period" ng-change="reWrite()"></select>
+  <input ng-model="day" type="date" ng-show="selectedPeriod=='Day'" ng-change="reWrite()">
+  <input ng-model="month" type="date" ng-show="selectedPeriod=='Month'" ng-change="reWrite()">
+  <br>
+  <div>Moisture Value: <img id="moisture_value_img" src="images/moisture_legend.png"/></div>
+  <div>Light: <img id="light_img" ng-src="{{src_light}}" /></div>
+  <div [style.background-color]="'rgb(' + src_light_spectrum_r + ',' + src_light_spectrum_g + ','  + src_light_spectrum_b + ')'">Light Spectrum: {{src_light_spectrum}}</div>
+  <div>Lux: {{src_lux}}</div>
+  <div>Fan Lamp: <img id="fan1_img" ng-src="{{src_fan_lamp}}" /></div>
+  <div>Fan In: <img id="fan2_img" ng-src="{{src_fan_in}}" /></div>
+  <div>Fan Out: <img id="fan3_img" ng-src="{{src_fan_out}}" /></div>
+  <div>Water Pump: <img id="pump_img" ng-src="{{src_pump}}" /></div>
+  <div>Water Level 0: <img id="water_level_img" ng-src="{{src_water_level_0}}" /></div>
+  <div>Water Level 1: <img id="water_level_img" ng-src="{{src_water_level_1}}" /></div>
+  <div>Peltier: <img id="peltier_img" ng-src="{{src_peltier}}" /></div>
+  <div>Humidifier: <img id="humidifier_img" ng-src="{{src_humidifier}}" /></div>
+  <div>Photo Timestamp: {{src_photo_timestamp}}</div>
+  <div>Photo: <img id="photo_img" ng-src="{{src_photo}}" style="background-size: auto 100%;"/></div>
+  
+  <div>
+    <input ng-model="from" type="date" max="{{to}}">
+    <input ng-model="to"   type="date" min="{{from}}" max="{{day | date:'yyyy-MM-dd'}}">
+    <button id="photo_range" ng-click="getPhotosRange()">Photo Range</button>
+    <button id="Last 100" ng-click="getPhotos()">Last 100</button>
+    <div class="spinner-border" ng-show="loading"></div>
+  </div>
+  <div>
+  	<img ng-repeat="src_photo_gallery in src_photos" src="{{src_photo_gallery}}" />
+  	<img ng-repeat="src_photo_gallery_range in src_photos_range" src="{{src_photo_gallery_range}}" />
+  </div>
+</body>
+</html>
